@@ -1,4 +1,4 @@
-// HeliumFox - settings the theme needs. Copy this file into your Firefox
+// Argon - settings the theme needs. Copy this file into your Firefox
 // profile folder (next to the chrome folder). Firefox applies it on every start.
 
 // Load chrome/userChrome.css and chrome/userContent.css

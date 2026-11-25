@@ -1,14 +1,14 @@
-# HeliumFox installer
-# Usage: irm https://raw.githubusercontent.com/rs4t/heliumfox/main/install.ps1 | iex
+# Argon installer
+# Usage: irm https://raw.githubusercontent.com/rs4t/argon-firefox/main/install.ps1 | iex
 
-function Install-HeliumFox {
+function Install-Argon {
     $ErrorActionPreference = 'Stop'
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-    $repo = 'https://raw.githubusercontent.com/rs4t/heliumfox/main'
+    $repo = 'https://raw.githubusercontent.com/rs4t/argon-firefox/main'
     $utf8 = New-Object Text.UTF8Encoding $false
 
-    # Settings HeliumFox needs. Latin Accent Plus' see-through settings are switched off.
+    # Settings Argon needs. Latin Accent Plus' see-through settings are switched off.
     $prefs = [ordered]@{
         'toolkit.legacyUserProfileCustomizations.stylesheets'          = 'true'
         'browser.tabs.inTitlebar'                                      = '1'
@@ -21,13 +21,13 @@ function Install-HeliumFox {
     }
 
     Write-Host ''
-    Write-Host '  HeliumFox installer' -ForegroundColor Cyan
+    Write-Host '  Argon installer' -ForegroundColor Cyan
     Write-Host ''
 
     # ---- Find the Firefox profile ------------------------------------------
     $ffDir = Join-Path $env:APPDATA 'Mozilla\Firefox'
-    if ($env:HELIUMFOX_PROFILE) {
-        $profiles = @($env:HELIUMFOX_PROFILE)
+    if ($env:ARGON_PROFILE) {
+        $profiles = @($env:ARGON_PROFILE)
     } else {
         $ini = Join-Path $ffDir 'profiles.ini'
         if (-not (Test-Path $ini)) {
@@ -83,11 +83,11 @@ function Install-HeliumFox {
 
     # The theme lives in its own files; userChrome.css / userContent.css only
     # import them. Other CSS add-ons imported there (like Firefox Compact) are
-    # kept. Latin Accent Plus' import is removed, since both themes style the
-    # same things.
+    # kept. Latin Accent Plus' import and HeliumFox's (Argon's old name) are
+    # removed, since they style the same things.
     $themeFiles = [ordered]@{
-        'userChrome.css'  = 'heliumfox.css'
-        'userContent.css' = 'heliumfox-content.css'
+        'userChrome.css'  = 'argon.css'
+        'userContent.css' = 'argon-content.css'
     }
     foreach ($entry in $themeFiles.GetEnumerator()) {
         Invoke-WebRequest -UseBasicParsing -Uri "$repo/chrome/$($entry.Value)" -OutFile (Join-Path $chromeDir $entry.Value)
@@ -97,6 +97,7 @@ function Install-HeliumFox {
     $backupDir = Join-Path $chromeDir ('backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
     $keptImports = @()
     $removedLatin = $false
+    $removedHelium = $false
     foreach ($entry in $themeFiles.GetEnumerator()) {
         $path = Join-Path $chromeDir $entry.Key
         $otherImports = @()
@@ -106,11 +107,12 @@ function Install-HeliumFox {
                 if ($l -notmatch '^\s*@import\s') { continue }
                 if ($l -match [regex]::Escape($entry.Value)) { continue }
                 if ($l -match 'latin-accent-plus') { $removedLatin = $true; continue }
+                if ($l -match 'heliumfox') { $removedHelium = $true; continue }   # Argon's old name
                 $otherImports += $l
             }
             # Anything besides @import lines (or a removed Latin Accent Plus import)
             # is another theme that gets replaced - keep a backup first.
-            if ($removedLatin -or @($lines | Where-Object { $_.Trim() -and $_ -notmatch '^\s*@import\s' }).Count -gt 0) {
+            if ($removedLatin -or $removedHelium -or @($lines | Where-Object { $_.Trim() -and $_ -notmatch '^\s*@import\s' }).Count -gt 0) {
                 New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
                 Copy-Item $path $backupDir
             }
@@ -122,6 +124,9 @@ function Install-HeliumFox {
     }
     if (Test-Path $backupDir) {
         Write-Host "  Backed up your old theme files to: $backupDir"
+    }
+    if ($removedHelium) {
+        Write-Host '  Replaced HeliumFox (this theme''s old name) with Argon.'
     }
     if ($removedLatin) {
         Write-Host '  Switched off Latin Accent Plus (its files are still there if you want it back).'
@@ -138,16 +143,16 @@ function Install-HeliumFox {
     $keep = @($existing | Where-Object {
         $line = $_
         -not ($names | Where-Object { $line -match ('user_pref\("' + [regex]::Escape($_) + '"') }) -and
-        $line -notmatch '^// HeliumFox'
+        $line -notmatch '^// (HeliumFox|Argon)'
     })
-    $block = @('', '// HeliumFox') + ($prefs.GetEnumerator() | ForEach-Object { "user_pref(`"$($_.Key)`", $($_.Value));" })
+    $block = @('', '// Argon') + ($prefs.GetEnumerator() | ForEach-Object { "user_pref(`"$($_.Key)`", $($_.Value));" })
     [IO.File]::WriteAllText($userJs, ((($keep + $block) -join "`r`n").Trim() + "`r`n"), $utf8)
-    Write-Host '  Set the Firefox settings HeliumFox needs.'
+    Write-Host '  Set the Firefox settings Argon needs.'
 
     # ---- Toolbar layout like Helium (needs Firefox closed) -------------------
     $prefsJs = Join-Path $profileDir 'prefs.js'
     $ffRunning = { [bool](Get-Process firefox -ErrorAction SilentlyContinue) }
-    if (-not $env:HELIUMFOX_PROFILE -and (& $ffRunning)) {
+    if (-not $env:ARGON_PROFILE -and (& $ffRunning)) {
         Write-Host ''
         Write-Host '  Firefox is open. Close it to also arrange the toolbar like Helium,' -ForegroundColor Yellow
         $answer = Read-Host '  then press Enter (or type S and Enter to skip)'
@@ -162,7 +167,7 @@ function Install-HeliumFox {
         $src = [IO.File]::ReadAllText($prefsJs, $utf8)
         $m = [regex]::Match($src, '(?m)^user_pref\("browser\.uiCustomization\.state", "(.*)"\);\r?$')
         if ($m.Success) {
-            Copy-Item $prefsJs ($prefsJs + '.heliumfox-backup') -Force
+            Copy-Item $prefsJs ($prefsJs + '.argon-backup') -Force
             $state = ('"' + $m.Groups[1].Value + '"' | ConvertFrom-Json) | ConvertFrom-Json
             $p = $state.placements
             $ext = @($p.'nav-bar' | Where-Object { $_ -like '*-browser-action' })
@@ -178,7 +183,7 @@ function Install-HeliumFox {
             $src = $src.Substring(0, $m.Groups[1].Index) + $encoded + $src.Substring($m.Groups[1].Index + $m.Groups[1].Length)
             [IO.File]::WriteAllText($prefsJs, $src, $utf8)
             $layoutDone = $true
-            Write-Host '  Arranged the toolbar like Helium (old settings saved as prefs.js.heliumfox-backup).'
+            Write-Host '  Arranged the toolbar like Helium (old settings saved as prefs.js.argon-backup).'
         }
     }
     if (-not $layoutDone) {
@@ -188,11 +193,11 @@ function Install-HeliumFox {
 
     Write-Host ''
     if (& $ffRunning) {
-        Write-Host '  Done! Close Firefox completely and open it again to see HeliumFox.' -ForegroundColor Green
+        Write-Host '  Done! Close Firefox completely and open it again to see Argon.' -ForegroundColor Green
     } else {
-        Write-Host '  Done! Open Firefox to see HeliumFox.' -ForegroundColor Green
+        Write-Host '  Done! Open Firefox to see Argon.' -ForegroundColor Green
     }
     Write-Host ''
 }
 
-Install-HeliumFox
+Install-Argon

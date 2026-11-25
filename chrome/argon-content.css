@@ -1,5 +1,7 @@
-/* Lets the Compact Mode extension see that HeliumFox is installed, so it can
+/* Lets the Compact Mode extension see that Argon is installed, so it can
    offer the layout picker. Only matches extension pages, never websites. */
 @-moz-document url-prefix("moz-extension://") {
+  #argon-probe { --argon-css: v1; }
+  /* old name, still read by Compact Mode 0.2.0 */
   #heliumfox-probe { --heliumfox-css: v1; }
 }

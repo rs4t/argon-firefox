@@ -1,12 +1,14 @@
-# HeliumFox
+# Argon
 
-[Helium](https://github.com/imputnet/helium)'s look for Firefox, with a few twists from [Latin Accent Plus](https://github.com/rs4t/latin-accent-plus). Just CSS and a settings file: no extensions needed.
+A calm, clean Firefox theme. It starts from the [Helium](https://github.com/imputnet/helium) browser's look, measured almost pixel for pixel, and adds my own touches from [Latin Accent Plus](https://github.com/rs4t/latin-accent-plus) and [Zen-Nebula](https://github.com/JustAdumbPrsn/Zen-Nebula). Just CSS and a settings file: no extensions needed.
 
-![Helium (top) and HeliumFox (bottom)](screenshots/helium-vs-heliumfox.png)
+Named after argon, the noble gas: its name is Greek for *idle*, and it glows blue-violet. *Formerly HeliumFox.*
 
-*Top: Helium. Bottom: Firefox with HeliumFox.*
+![Helium (top) and Argon (bottom)](screenshots/helium-vs-argon.png)
 
-Helium is the main inspiration. Its layout, sizes and colors were measured from a running Helium window and checked against Helium's source code, so Firefox lines up with it almost pixel for pixel. HeliumFox is an unofficial fan theme and isn't affiliated with Helium or imput.
+*Top: Helium. Bottom: Firefox with Argon.*
+
+Helium is the main inspiration. Its layout, sizes and colors were measured from a running Helium window and checked against Helium's source code, so Firefox lines up with it almost pixel for pixel. Argon is an unofficial fan theme and isn't affiliated with Helium or imput.
 
 ## What it copies from Helium
 
@@ -19,7 +21,7 @@ Helium is the main inspiration. Its layout, sizes and colors were measured from 
 - **Helium's icons:** the back, forward, reload, `+`, extensions, menu, download, bookmark-star and site-info icons are Chromium's own, the ones Helium uses. Toolbar buttons get Helium's round hover.
 - **Small details:** the three-dot menu, a globe icon for sites without one, a star icon on the new tab, and thin overlay scrollbars that only show while scrolling.
 
-## My twists (from Latin Accent Plus)
+## Argon's own touches
 
 - **Your Windows accent color**, which can follow your wallpaper, for the focus ring, the loading bar and accent-colored icons and text on hover. Hover backgrounds stay Helium's neutral gray.
 - **Bookmarks bar on hover:** with *Only Show on New Tab*, it stays hidden and slides in when you hover the toolbar.
@@ -36,15 +38,15 @@ Helium is the main inspiration. Its layout, sizes and colors were measured from 
 Paste this into PowerShell and press Enter:
 
 ```powershell
-irm https://raw.githubusercontent.com/rs4t/heliumfox/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/rs4t/argon-firefox/main/install.ps1 | iex
 ```
 
 The installer:
-- **Finds your profile:** it finds your Firefox profile and saves the theme as `heliumfox.css` and `heliumfox-content.css`.
+- **Finds your profile:** it finds your Firefox profile and saves the theme as `argon.css` and `argon-content.css`.
 - **Imports the theme:** it imports them from `userChrome.css` and `userContent.css`. Other `@import` lines (like [Firefox Compact](https://github.com/rs4t/firefox-compact)) are kept.
 - **Replaces Latin Accent Plus:** it switches off Latin Accent Plus and its see-through settings if you had it, and backs up any older theme.
-- **Turns on settings:** it enables the settings HeliumFox needs.
-- **Arranges the toolbar:** if Firefox is closed, it arranges the toolbar like Helium. Your old settings are saved as `prefs.js.heliumfox-backup`.
+- **Turns on settings:** it enables the settings Argon needs.
+- **Arranges the toolbar:** if Firefox is closed, it arranges the toolbar like Helium. Your old settings are saved as `prefs.js.argon-backup`.
 
 Read what it does in [install.ps1](install.ps1).
 
@@ -55,7 +57,7 @@ Read what it does in [install.ps1](install.ps1).
 - Copy everything from [`chrome/`](chrome) into a `chrome` folder there. Create the folder if it doesn't exist.
 - Copy [`user.js`](user.js) next to it, directly in the profile folder.
 
-If you already have a `userChrome.css` or `userContent.css`, add `@import "heliumfox.css";` or `@import "heliumfox-content.css";` to it instead of replacing it.
+If you already have a `userChrome.css` or `userContent.css`, add `@import "argon.css";` or `@import "argon-content.css";` to it instead of replacing it.
 
 **2. Restart Firefox** completely (close it, then reopen it).
 
@@ -85,7 +87,7 @@ It also adds Helium's **Frameless mode**, which hides the toolbars until you hov
 
 ## Customize
 
-At the top of `heliumfox.css`:
+At the top of `argon.css`:
 
 | Variable | What it does |
 | --- | --- |

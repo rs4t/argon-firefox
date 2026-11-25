@@ -1,6 +1,7 @@
 /* ==========================================================================
-   HeliumFox  -  https://github.com/rs4t/heliumfox
-   Helium's look for Firefox, with a few twists from Latin Accent Plus.
+   Argon  -  https://github.com/rs4t/argon-firefox  (formerly Argon)
+   A calm, clean Firefox theme: Helium's look as the base, with my own
+   touches from Latin Accent Plus and Zen-Nebula on top.
 
    Layout, sizes and colours copy Helium's "Dynamic" layout
    (https://github.com/imputnet/helium, GPL-3.0):
@@ -442,7 +443,10 @@ toolbarbutton, .tab-background { transition: none !important; }
    Helium-neutral; the accent colours icons and text on hover, and the focus ring.
    ========================================================================== */
 :root {
-  --h-accent: AccentColor;
+  --h-accent-raw: AccentColor;
+  /* Readable accent: lifted towards white in dark mode, deepened in light mode */
+  --h-accent: color-mix(in srgb, var(--h-accent-raw) 80%, black);
+  --h-on-accent: white;
   --h-focus: var(--h-accent);
   --toolbarbutton-icon-fill-attention: var(--h-accent) !important;
 }
@@ -705,10 +709,10 @@ toolbar .toolbarbutton-1:not([disabled]):hover,
    and menu / panel highlights use Helium's neutral grey (text goes accent)
    ========================================================================== */
 :root, menupopup, panel {
-  --color-accent-primary: AccentColor !important;
-  --color-accent-primary-hover: color-mix(in srgb, AccentColor 85%, white) !important;
-  --color-accent-primary-active: color-mix(in srgb, AccentColor 70%, white) !important;
-  --color-accent-primary-selected: AccentColor !important;
+  --color-accent-primary: var(--h-accent) !important;
+  --color-accent-primary-hover: color-mix(in srgb, var(--h-accent) 85%, white) !important;
+  --color-accent-primary-active: color-mix(in srgb, var(--h-accent) 70%, white) !important;
+  --color-accent-primary-selected: var(--h-accent) !important;
   --button-background-color-ghost-hover: var(--h-hover) !important;
   --button-background-color-ghost-active: var(--h-hover) !important;
   --button-background-color-ghost-selected: var(--h-hover) !important;
@@ -867,13 +871,13 @@ toolbarseparator { border-top-color: var(--h-content-border) !important; }
 .panel-footer > button:is(.primary, [default]),
 .popup-notification-primary-button {
   background-color: var(--h-accent) !important;
-  color: AccentColorText !important;
+  color: var(--h-on-accent) !important;
 }
 :is(panel, notification-message) button:is(.primary, [default]):hover,
 .panel-footer > button:is(.primary, [default]):hover,
 .popup-notification-primary-button:hover {
   background-color: color-mix(in srgb, var(--h-accent) 85%, white) !important;
-  color: AccentColorText !important;
+  color: var(--h-on-accent) !important;
 }
 
 /* Downloads list */
@@ -1174,3 +1178,60 @@ tooltip {
   min-width: 28px !important;
   align-self: center !important;
 }
+
+/* Site info: one lock button (Firefox 159's trust button), like a normal
+   address bar. Firefox's older site-info button opens the same panel, so it's
+   hidden; the site-permissions icon next to it stays. The lock is Chromium's
+   (https_valid). */
+:root { --h-ico-lock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.07 22.18 a2.19 2.19 0 0 1 -1.6 -0.67 a2.19 2.19 0 0 1 -0.67 -1.61 v-9.85 c0 -0.62 0.22 -1.16 0.67 -1.61 a2.19 2.19 0 0 1 1.61 -0.67 h0.84 V5.95 c0 -1.42 0.5 -2.62 1.49 -3.62 C9.39 1.34 10.59 0.84 12 0.84 c1.41 0 2.61 0.5 3.6 1.49 c0.99 1 1.49 2.2 1.49 3.62 v1.82 h0.84 c0.63 0 1.16 0.22 1.61 0.67 c0.45 0.45 0.67 0.99 0.67 1.61 v9.86 a2.19 2.19 0 0 1 -0.67 1.61 a2.19 2.19 0 0 1 -1.6 0.67 Z m0 -2.27 h11.86 v-9.85 H6.07 Z M12 16.98 c0.55 0 1.02 -0.19 1.41 -0.58 c0.39 -0.39 0.59 -0.86 0.59 -1.41 c0 -0.55 -0.19 -1.02 -0.59 -1.41 A1.94 1.94 0 0 0 12 12.98 c-0.55 0 -1.02 0.2 -1.41 0.59 c-0.39 0.39 -0.59 0.86 -0.59 1.41 c0 0.55 0.2 1.02 0.59 1.42 c0.39 0.39 0.86 0.59 1.41 0.59 Z M9.18 7.78 h5.63 V5.95 c0 -0.79 -0.27 -1.46 -0.82 -2.01 A2.7 2.7 0 0 0 12 3.12 c-0.78 0 -1.45 0.27 -2 0.82 a2.74 2.74 0 0 0 -0.82 2.01 Z M6.07 19.91 v-9.85 Z'/%3E%3C/svg%3E"); }
+#identity-box > #identity-icon-box { display: none !important; }
+#trust-icon-container:not(.insecure, .breached) #trust-icon {
+  mask-image: var(--h-ico-lock) !important;
+  mask-size: 18px 18px !important;
+}
+
+/* Dark mode: brighter accent (70% your accent + 30% white), dark text on it */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --h-accent: color-mix(in srgb, var(--h-accent-raw) 70%, white);
+    --h-on-accent: #111313;
+  }
+}
+
+/* ==========================================================================
+   Icons in the ⋮ menu, like Helium's (Chromium's menu icons, BSD licence).
+   Each item's icon is a mask in --h-mi: grey, accent-coloured on hover.
+   ========================================================================== */
+#appMenu-create-profile-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M11.87 8.63 V7.26 h-1.37 V6 h1.37 V4.63 h1.27 v1.37 h1.37 v1.27 h-1.37 v1.37 Z m-5.46 -0.69 a2.45 2.45 0 0 1 -1.8 -0.74 a2.45 2.45 0 0 1 -0.74 -1.8 c0 -0.71 0.25 -1.31 0.74 -1.8 a2.45 2.45 0 0 1 1.8 -0.74 c0.71 0 1.31 0.25 1.8 0.74 c0.49 0.49 0.74 1.09 0.74 1.8 a2.45 2.45 0 0 1 -0.74 1.8 a2.45 2.45 0 0 1 -1.8 0.74 Z m-4.93 5.07 v-1.68 c0 -0.31 0.08 -0.6 0.23 -0.86 c0.15 -0.26 0.36 -0.47 0.63 -0.62 a8.32 8.32 0 0 1 1.96 -0.82 a7.86 7.86 0 0 1 2.11 -0.29 a8.04 8.04 0 0 1 4.08 1.11 c0.27 0.16 0.48 0.36 0.63 0.62 c0.15 0.26 0.23 0.55 0.23 0.87 v1.68 Z m1.38 -1.38 h7.11 v-0.27 a0.36 0.36 0 0 0 -0.05 -0.19 a0.39 0.39 0 0 0 -0.13 -0.13 a7.14 7.14 0 0 0 -1.61 -0.67 a6.62 6.62 0 0 0 -1.76 -0.23 c-0.59 0 -1.18 0.08 -1.75 0.24 a6.93 6.93 0 0 0 -1.61 0.67 a0.39 0.39 0 0 0 -0.13 0.13 a0.36 0.36 0 0 0 -0.05 0.19 Z m3.56 -5.07 c0.32 0 0.59 -0.11 0.81 -0.34 c0.23 -0.23 0.34 -0.5 0.34 -0.82 c0 -0.32 -0.11 -0.59 -0.33 -0.81 a1.12 1.12 0 0 0 -0.82 -0.33 c-0.32 0 -0.59 0.11 -0.81 0.34 a1.1 1.1 0 0 0 -0.34 0.81 c0 0.32 0.11 0.59 0.34 0.82 c0.23 0.22 0.5 0.34 0.82 0.34 Z M6.41 5.38 Z m0 6.24 Z'/%3E%3C/svg%3E"); }
+#appMenu-new-tab-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.65 13.73 c-0.38 0 -0.71 -0.13 -0.98 -0.4 a1.34 1.34 0 0 1 -0.4 -0.98 V3.65 c0 -0.38 0.13 -0.71 0.4 -0.98 c0.27 -0.27 0.6 -0.4 0.98 -0.4 h3.99 v1.38 H3.65 v8.7 h8.7 V8.37 h1.38 v3.99 c0 0.39 -0.13 0.71 -0.4 0.98 c-0.27 0.27 -0.6 0.4 -0.98 0.4 Z m6.99 -6.57 v-1.8 H8.83 V4.07 h1.8 v-1.8 h1.3 v1.8 h1.8 v1.3 h-1.8 v1.8 Z'/%3E%3C/svg%3E"); }
+#appMenu-new-window-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.85 11.55 h10.3 V7.2 H8.8 V4.45 H2.85 Z m0 1.38 c-0.38 0 -0.71 -0.13 -0.98 -0.4 a1.34 1.34 0 0 1 -0.4 -0.98 V4.44 c0 -0.38 0.13 -0.71 0.4 -0.98 c0.27 -0.27 0.6 -0.4 0.98 -0.4 h10.31 c0.38 0 0.71 0.13 0.98 0.4 c0.27 0.27 0.4 0.6 0.4 0.98 v7.11 c0 0.38 -0.13 0.71 -0.4 0.98 c-0.27 0.27 -0.6 0.4 -0.98 0.4 Z m0 -1.38 V4.45 Z'/%3E%3C/svg%3E"); }
+#appMenu-new-private-window-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5.16 12.83 a1.95 1.95 0 0 1 -1.44 -0.59 a1.96 1.96 0 0 1 -0.59 -1.44 c0 -0.57 0.2 -1.05 0.59 -1.44 c0.39 -0.39 0.87 -0.59 1.44 -0.59 c0.42 0 0.8 0.12 1.14 0.36 c0.34 0.24 0.59 0.55 0.75 0.93 c0.14 -0.06 0.29 -0.11 0.44 -0.13 c0.16 -0.03 0.32 -0.04 0.47 -0.04 a2.43 2.43 0 0 1 0.92 0.18 a2.1 2.1 0 0 1 0.74 -0.93 c0.34 -0.24 0.72 -0.36 1.14 -0.36 c0.57 0 1.04 0.2 1.44 0.59 c0.4 0.4 0.59 0.88 0.59 1.44 c0 0.57 -0.2 1.05 -0.59 1.44 c-0.39 0.4 -0.87 0.59 -1.44 0.59 c-0.43 0 -0.82 -0.12 -1.16 -0.36 a1.89 1.89 0 0 1 -0.73 -0.95 a1.25 1.25 0 0 0 -1.41 -0.28 c-0.16 0.07 -0.29 0.16 -0.41 0.28 c-0.14 0.39 -0.38 0.71 -0.73 0.95 a2 2 0 0 1 -1.16 0.36 Z m0 -1.27 c0.21 0 0.4 -0.07 0.54 -0.22 a0.74 0.74 0 0 0 0.23 -0.54 a0.74 0.74 0 0 0 -0.23 -0.54 a0.73 0.73 0 0 0 -0.54 -0.23 a0.73 0.73 0 0 0 -0.54 0.23 a0.75 0.75 0 0 0 -0.23 0.54 c0 0.21 0.08 0.39 0.23 0.54 a0.74 0.74 0 0 0 0.54 0.22 Z m5.6 0 a0.75 0.75 0 0 0 0.54 -0.22 a0.74 0.74 0 0 0 0.23 -0.54 a0.73 0.73 0 0 0 -0.23 -0.54 a0.74 0.74 0 0 0 -0.54 -0.23 a0.73 0.73 0 0 0 -0.54 0.23 a0.73 0.73 0 0 0 -0.23 0.54 c0 0.21 0.08 0.39 0.23 0.54 a0.74 0.74 0 0 0 0.54 0.22 Z M2.3 8 V6.68 h2.04 L5.59 2.78 c0.1 -0.24 0.25 -0.41 0.45 -0.52 c0.2 -0.11 0.42 -0.14 0.68 -0.08 l1.25 0.33 l1.25 -0.33 a0.91 0.91 0 0 1 0.67 0.08 c0.2 0.11 0.35 0.28 0.45 0.52 l1.26 3.9 h2.12 V8 Z m3.5 -1.32 h4.33 l-0.99 -3.05 l-1.18 0.31 l-1.18 -0.31 Z m2.18 -0.07 h2.19 h-4.39 Z'/%3E%3C/svg%3E"); }
+#appMenu-history-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 17 c-1.94 0 -3.6 -0.68 -4.96 -2.04 C3.68 13.6 3 11.95 3 10 h1.5 c0 1.52 0.54 2.81 1.61 3.89 C7.19 14.96 8.48 15.5 10 15.5 c1.52 0 2.81 -0.54 3.89 -1.61 C14.96 12.81 15.5 11.52 15.5 10 c0 -1.52 -0.54 -2.81 -1.61 -3.89 C12.81 5.04 11.52 4.5 10 4.5 c-0.86 0 -1.66 0.18 -2.39 0.54 A5.33 5.33 0 0 0 5.77 6.5 H8 V8 H3 V3 h1.5 v2.71 A6.94 6.94 0 0 1 6.89 3.73 C7.84 3.24 8.88 3 10 3 c0.97 0 1.88 0.18 2.73 0.56 c0.85 0.37 1.59 0.87 2.22 1.5 a7.05 7.05 0 0 1 1.5 2.22 c0.37 0.85 0.56 1.76 0.56 2.73 c0 0.97 -0.18 1.88 -0.56 2.73 a7.05 7.05 0 0 1 -1.5 2.22 a7.05 7.05 0 0 1 -2.22 1.5 A6.73 6.73 0 0 1 10 17 Z m2.08 -4.17 L9.25 10 V6 h1.5 v3.38 l2.4 2.4 Z'/%3E%3C/svg%3E"); }
+#appMenu-bookmarks-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7.33 13.9 L10 12.31 l2.69 1.58 l-0.71 -3 l2.31 -1.98 l-3.06 -0.27 L10 5.79 L8.77 8.65 l-3.06 0.27 l2.34 1.98 Z M5.06 17 l1.31 -5.54 L2 7.73 l5.75 -0.5 L10 2 l2.25 5.25 l5.75 0.48 l-4.37 3.73 L14.94 17 L10 14.06 Z M10 10.06 Z m0 0 Z'/%3E%3C/svg%3E"); }
+#appMenu-tab-groups-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round'%3E%3Crect x='1.5' y='5' width='9.5' height='8.5' rx='1.6'/%3E%3Cpath d='M5 5V3.6c0-.6.5-1.1 1.1-1.1h7.3c.6 0 1.1.5 1.1 1.1v6.3c0 .6-.5 1.1-1.1 1.1H11'/%3E%3C/svg%3E"); }
+#appMenu-downloads-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.35 L4.61 6.96 l0.98 -0.97 l1.72 1.72 V2.27 H8.69 V7.71 l1.72 -1.72 l0.98 0.97 Z m-3.56 2.58 c-0.38 0 -0.71 -0.13 -0.98 -0.4 a1.35 1.35 0 0 1 -0.4 -0.98 v-1.2 H4.45 v1.2 h7.1 v-1.2 h1.38 v1.2 c0 0.38 -0.13 0.71 -0.4 0.98 c-0.27 0.27 -0.6 0.4 -0.98 0.4 Z'/%3E%3C/svg%3E"); }
+#appMenu-passwords-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M17.42 12 H30 v5 h-2 v5 h-4 v-5 h-6.25 C16.86 20.45 13.73 23 10 23 c-4.42 0 -8 -3.58 -8 -8 c0 -4.42 3.58 -8 8 -8 c3.36 0 6.23 2.07 7.42 5 Z M10 18 c1.66 0 3 -1.34 3 -3 c0 -1.66 -1.34 -3 -3 -3 c-1.66 0 -3 1.34 -3 3 c0 1.66 1.34 3 3 3 Z'/%3E%3C/svg%3E"); }
+#appMenu-extensions-themes-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4.5 17 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.44 1.44 0 0 1 3 15.5 V12 a2.12 2.12 0 0 0 1.42 -0.61 A1.88 1.88 0 0 0 5 10 a1.88 1.88 0 0 0 -0.58 -1.39 A2.12 2.12 0 0 0 3 8 V4.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.44 1.44 0 0 1 4.5 3 H8 c0 -0.56 0.19 -1.03 0.58 -1.42 A1.93 1.93 0 0 1 10 1 c0.56 0 1.03 0.19 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 h3.5 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.29 0.44 0.65 0.44 1.06 V8 a1.94 1.94 0 0 1 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 c0 0.56 -0.19 1.03 -0.58 1.42 A1.94 1.94 0 0 1 17 12 v3.5 c0 0.41 -0.15 0.77 -0.44 1.06 A1.44 1.44 0 0 1 15.5 17 Z m0 -1.5 h11 v-11 h-11 v2.33 a3.23 3.23 0 0 1 1.47 1.28 C6.32 8.69 6.5 9.32 6.5 10 c0 0.7 -0.18 1.33 -0.53 1.91 A3.12 3.12 0 0 1 4.5 13.17 Z M10 10 Z'/%3E%3C/svg%3E"); }
+#appMenu-unified-extensions-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4.5 17 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.44 1.44 0 0 1 3 15.5 V12 a2.12 2.12 0 0 0 1.42 -0.61 A1.88 1.88 0 0 0 5 10 a1.88 1.88 0 0 0 -0.58 -1.39 A2.12 2.12 0 0 0 3 8 V4.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.44 1.44 0 0 1 4.5 3 H8 c0 -0.56 0.19 -1.03 0.58 -1.42 A1.93 1.93 0 0 1 10 1 c0.56 0 1.03 0.19 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 h3.5 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.29 0.44 0.65 0.44 1.06 V8 a1.94 1.94 0 0 1 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 c0 0.56 -0.19 1.03 -0.58 1.42 A1.94 1.94 0 0 1 17 12 v3.5 c0 0.41 -0.15 0.77 -0.44 1.06 A1.44 1.44 0 0 1 15.5 17 Z m0 -1.5 h11 v-11 h-11 v2.33 a3.23 3.23 0 0 1 1.47 1.28 C6.32 8.69 6.5 9.32 6.5 10 c0 0.7 -0.18 1.33 -0.53 1.91 A3.12 3.12 0 0 1 4.5 13.17 Z M10 10 Z'/%3E%3C/svg%3E"); }
+#appMenu-print-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10.75 5.47 V3.65 H5.25 v1.82 H3.86 v-3.2 h8.27 v3.2 Z M2.85 6.85 h10.32 Z m8.86 1.72 a0.65 0.65 0 0 0 0.66 -0.66 a0.66 0.66 0 0 0 -0.19 -0.47 a0.63 0.63 0 0 0 -0.47 -0.19 a0.67 0.67 0 0 0 -0.47 0.19 a0.64 0.64 0 0 0 -0.19 0.47 a0.66 0.66 0 0 0 0.66 0.66 Z m-0.95 3.88 v-2.1 H5.25 v2.09 Z m1.38 1.36 H3.86 v-2.49 H1.47 V7.2 c0 -0.48 0.17 -0.89 0.5 -1.23 c0.33 -0.34 0.74 -0.51 1.22 -0.51 h9.63 c0.48 0 0.89 0.17 1.22 0.51 c0.33 0.34 0.5 0.75 0.5 1.23 v4.11 h-2.4 Z m1.03 -3.87 v-2.5 a0.53 0.53 0 0 0 -0.18 -0.41 a0.61 0.61 0 0 0 -0.42 -0.17 H3.42 c-0.16 0 -0.3 0.06 -0.41 0.17 a0.58 0.58 0 0 0 -0.16 0.42 V9.93 h1.01 v-0.96 h8.27 v0.96 Z'/%3E%3C/svg%3E"); }
+#appMenu-save-file-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.41 9.09 L7 10.5 l5 5 l5 -5 l-1.41 -1.41 L13 11.67 V3 h-2 v8.67 L8.41 9.09 Z M21 19 V5 c0 -1.11 -0.9 -2 -2 -2 h-4 v2 h4 v14 H5 V5 h4 V3 H5 c-1.1 0 -2 0.89 -2 2 v14 c0 1.1 0.9 2 2 2 h14 c1.1 0 2 -0.9 2 -2 Z'/%3E%3C/svg%3E"); }
+#appMenu-translate-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m7.98 14.54 l2.86 -7.78 h1.64 l2.86 7.78 h-1.52 l-0.62 -1.78 h-3.09 l-0.62 1.78 Z m-5.23 -1.96 l-0.96 -0.98 l3.18 -3.14 a18.24 18.24 0 0 1 -1.17 -1.36 a8.33 8.33 0 0 1 -0.89 -1.45 H4.5 c0.18 0.31 0.37 0.59 0.57 0.83 c0.2 0.23 0.48 0.56 0.85 0.98 c0.41 -0.47 0.8 -0.95 1.14 -1.43 c0.34 -0.48 0.62 -1 0.84 -1.55 H0.64 V3.07 h4.6 V1.47 h1.38 v1.6 h4.6 V4.45 H9.38 a7.85 7.85 0 0 1 -1.03 2.1 a18.99 18.99 0 0 1 -1.5 1.89 L8.18 9.75 l-0.53 1.44 l-1.74 -1.73 Z m7.82 -1.1 h2.17 l-1.05 -3.05 Z'/%3E%3C/svg%3E"); }
+#appMenu-find-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m15.94 17 l-4.98 -4.98 a4.99 4.99 0 0 1 -1.37 0.72 A4.71 4.71 0 0 1 8 13 c-1.39 0 -2.57 -0.48 -3.54 -1.46 C3.48 10.57 3 9.39 3 8 c0 -1.39 0.48 -2.57 1.46 -3.54 C5.43 3.48 6.61 3 8 3 c1.39 0 2.57 0.48 3.54 1.46 C12.52 5.43 13 6.61 13 8 c0 0.56 -0.09 1.09 -0.26 1.59 c-0.17 0.5 -0.41 0.96 -0.72 1.37 l4.98 4.98 Z M8 11.5 c0.97 0 1.8 -0.34 2.48 -1.02 c0.68 -0.68 1.02 -1.51 1.02 -2.48 c0 -0.97 -0.34 -1.8 -1.02 -2.48 C9.8 4.84 8.97 4.5 8 4.5 c-0.97 0 -1.8 0.34 -2.48 1.02 C4.84 6.2 4.5 7.03 4.5 8 c0 0.97 0.34 1.8 1.02 2.48 c0.68 0.68 1.51 1.02 2.48 1.02 Z'/%3E%3C/svg%3E"); }
+#appMenu-settings-button { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m6.6 14.54 l-0.37 -1.94 c-0.23 -0.09 -0.46 -0.2 -0.68 -0.32 a3.78 3.78 0 0 1 -0.62 -0.43 l-1.87 0.64 l-1.4 -2.43 l1.48 -1.29 a6.3 6.3 0 0 1 -0.05 -0.37 A4.13 4.13 0 0 1 3.06 8 c0 -0.13 0.01 -0.26 0.02 -0.39 c0.01 -0.12 0.03 -0.24 0.05 -0.37 L1.64 5.96 l1.4 -2.43 l1.88 0.63 c0.2 -0.16 0.4 -0.3 0.62 -0.43 c0.22 -0.12 0.45 -0.23 0.68 -0.32 l0.38 -1.95 h2.8 l0.38 1.95 c0.24 0.09 0.46 0.2 0.68 0.32 c0.22 0.12 0.43 0.26 0.63 0.43 l1.88 -0.63 l1.4 2.43 l-1.49 1.29 a4.15 4.15 0 0 1 0.06 0.75 a4.15 4.15 0 0 1 -0.06 0.75 l1.49 1.29 l-1.41 2.43 l-1.88 -0.64 a4.07 4.07 0 0 1 -0.62 0.43 a5.2 5.2 0 0 1 -0.68 0.32 l-0.37 1.95 Z m1.14 -1.38 h0.51 l0.32 -1.64 a3.73 3.73 0 0 0 1.2 -0.44 a3.28 3.28 0 0 0 0.96 -0.82 l1.59 0.53 l0.25 -0.43 l-1.25 -1.11 c0.07 -0.19 0.12 -0.39 0.16 -0.6 c0.04 -0.21 0.06 -0.42 0.06 -0.65 c0 -0.23 -0.02 -0.44 -0.06 -0.65 c-0.04 -0.21 -0.09 -0.41 -0.16 -0.61 l1.26 -1.11 l-0.26 -0.42 l-1.59 0.53 a3.4 3.4 0 0 0 -0.96 -0.82 a3.72 3.72 0 0 0 -1.2 -0.44 l-0.32 -1.64 h-0.52 L7.43 4.48 a3.76 3.76 0 0 0 -1.21 0.44 a3.42 3.42 0 0 0 -0.96 0.82 l-1.59 -0.53 l-0.26 0.43 l1.25 1.11 a4.45 4.45 0 0 0 -0.16 0.61 c-0.04 0.21 -0.06 0.43 -0.06 0.65 c0 0.23 0.02 0.44 0.06 0.65 c0.04 0.21 0.09 0.41 0.16 0.61 l-1.25 1.1 l0.26 0.43 l1.59 -0.53 c0.27 0.33 0.59 0.6 0.97 0.81 c0.38 0.22 0.78 0.36 1.2 0.44 Z m0.25 -2.75 a2.3 2.3 0 0 0 1.7 -0.7 A2.3 2.3 0 0 0 10.39 8 a2.3 2.3 0 0 0 -0.7 -1.7 a2.3 2.3 0 0 0 -1.7 -0.7 c-0.66 0 -1.23 0.23 -1.7 0.7 A2.3 2.3 0 0 0 5.59 8 a2.3 2.3 0 0 0 0.7 1.7 c0.47 0.47 1.03 0.7 1.7 0.7 Z M8 8 Z'/%3E%3C/svg%3E"); }
+#appMenu-more-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 9.23 Z m-5.73 3.7 V6.91 c0 -0.38 0.13 -0.71 0.4 -0.98 a1.35 1.35 0 0 1 0.98 -0.4 h1.42 V4.45 c0 -0.39 0.13 -0.71 0.4 -0.98 c0.27 -0.27 0.6 -0.4 0.98 -0.4 h3.1 c0.38 0 0.71 0.13 0.98 0.4 c0.27 0.27 0.4 0.6 0.4 0.98 v1.08 h1.42 c0.38 0 0.71 0.14 0.98 0.41 c0.27 0.27 0.4 0.59 0.4 0.98 v6.02 Z M6.15 9.91 v0.6 H4.77 V9.91 H3.65 v1.64 h8.7 V9.91 H11.23 v0.6 H9.85 V9.91 Z m-2.5 -3 v1.64 H4.77 v-0.6 h1.38 v0.6 h3.7 v-0.6 h1.38 v0.6 h1.12 V6.91 Z M6.45 5.53 h3.1 V4.45 H6.45 Z'/%3E%3C/svg%3E"); }
+#appMenu-help-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M7.99 12 a0.82 0.82 0 0 0 0.6 -0.25 a0.82 0.82 0 0 0 0.25 -0.6 a0.8 0.8 0 0 0 -0.25 -0.59 a0.82 0.82 0 0 0 -0.6 -0.25 a0.81 0.81 0 0 0 -0.6 0.25 a0.8 0.8 0 0 0 -0.25 0.59 c0 0.24 0.08 0.43 0.25 0.6 a0.81 0.81 0 0 0 0.6 0.25 Z m-0.64 -2.55 H8.64 c0 -0.4 0.04 -0.69 0.11 -0.86 c0.07 -0.18 0.24 -0.39 0.51 -0.64 c0.38 -0.37 0.64 -0.69 0.79 -0.96 c0.15 -0.27 0.22 -0.57 0.22 -0.9 c0 -0.62 -0.2 -1.12 -0.61 -1.51 c-0.41 -0.39 -0.94 -0.58 -1.59 -0.58 c-0.58 0 -1.08 0.16 -1.51 0.47 c-0.43 0.31 -0.73 0.73 -0.9 1.26 l1.17 0.48 c0.11 -0.32 0.26 -0.56 0.47 -0.73 c0.21 -0.17 0.45 -0.25 0.72 -0.25 c0.28 0 0.52 0.08 0.7 0.25 A0.83 0.83 0 0 1 9 6.12 c0 0.24 -0.08 0.46 -0.25 0.66 a6.56 6.56 0 0 1 -0.54 0.56 c-0.38 0.35 -0.62 0.65 -0.71 0.88 c-0.1 0.24 -0.15 0.65 -0.15 1.24 Z M8 14.53 a6.32 6.32 0 0 1 -2.54 -0.51 a6.52 6.52 0 0 1 -2.08 -1.4 a6.52 6.52 0 0 1 -1.4 -2.08 A6.32 6.32 0 0 1 1.47 8 a6.3 6.3 0 0 1 0.51 -2.55 A6.53 6.53 0 0 1 3.38 3.38 A6.52 6.52 0 0 1 5.46 1.98 A6.32 6.32 0 0 1 8 1.47 a6.3 6.3 0 0 1 2.55 0.51 c0.79 0.34 1.48 0.8 2.07 1.4 a6.53 6.53 0 0 1 1.4 2.07 A6.3 6.3 0 0 1 14.54 8 c0 0.9 -0.17 1.75 -0.51 2.54 a6.52 6.52 0 0 1 -1.4 2.08 a6.53 6.53 0 0 1 -2.07 1.4 A6.3 6.3 0 0 1 8 14.54 Z m0 -1.38 c1.43 0 2.65 -0.5 3.65 -1.5 c1 -1 1.5 -2.22 1.5 -3.65 c0 -1.43 -0.5 -2.65 -1.5 -3.65 S9.43 2.85 8 2.85 c-1.43 0 -2.65 0.5 -3.65 1.5 S2.85 6.57 2.85 8 c0 1.43 0.5 2.65 1.5 3.65 c1 1 2.22 1.5 3.65 1.5 Z M8 8 Z'/%3E%3C/svg%3E"); }
+#appMenu-quit-button2 { --h-mi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.65 13.73 c-0.38 0 -0.71 -0.13 -0.98 -0.4 a1.34 1.34 0 0 1 -0.4 -0.98 v-2.66 h1.38 v2.66 h8.7 V3.65 H3.65 v2.66 H2.27 v-2.66 c0 -0.38 0.13 -0.71 0.4 -0.98 c0.27 -0.27 0.6 -0.4 0.98 -0.4 h8.7 c0.38 0 0.71 0.13 0.98 0.4 c0.27 0.27 0.4 0.6 0.4 0.98 v8.7 c0 0.38 -0.13 0.71 -0.4 0.98 c-0.27 0.27 -0.6 0.4 -0.98 0.4 Z m3.63 -2.37 l-0.98 -0.97 L7.99 8.69 H2.27 V7.31 h5.72 L6.29 5.61 l0.98 -0.97 L10.63 8 Z'/%3E%3C/svg%3E"); }
+:is(#appMenu-create-profile-button, #appMenu-new-tab-button2, #appMenu-new-window-button2, #appMenu-new-private-window-button2, #appMenu-history-button, #appMenu-bookmarks-button, #appMenu-tab-groups-button, #appMenu-downloads-button, #appMenu-passwords-button, #appMenu-extensions-themes-button, #appMenu-unified-extensions-button, #appMenu-print-button2, #appMenu-save-file-button2, #appMenu-translate-button, #appMenu-find-button2, #appMenu-settings-button, #appMenu-more-button2, #appMenu-help-button2, #appMenu-quit-button2) > .toolbarbutton-icon {
+  display: flex !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  margin-inline-end: 10px !important;
+  list-style-image: none !important;
+  background-color: var(--h-fg2) !important;
+  mask: var(--h-mi) center / 16px 16px no-repeat !important;
+}
+:is(#appMenu-create-profile-button, #appMenu-new-tab-button2, #appMenu-new-window-button2, #appMenu-new-private-window-button2, #appMenu-history-button, #appMenu-bookmarks-button, #appMenu-tab-groups-button, #appMenu-downloads-button, #appMenu-passwords-button, #appMenu-extensions-themes-button, #appMenu-unified-extensions-button, #appMenu-print-button2, #appMenu-save-file-button2, #appMenu-translate-button, #appMenu-find-button2, #appMenu-settings-button, #appMenu-more-button2, #appMenu-help-button2, #appMenu-quit-button2):not([disabled]):hover > .toolbarbutton-icon {
+  background-color: var(--h-accent) !important;
+}
+:is(#appMenu-create-profile-button, #appMenu-new-tab-button2, #appMenu-new-window-button2, #appMenu-new-private-window-button2, #appMenu-history-button, #appMenu-bookmarks-button, #appMenu-tab-groups-button, #appMenu-downloads-button, #appMenu-passwords-button, #appMenu-extensions-themes-button, #appMenu-unified-extensions-button, #appMenu-print-button2, #appMenu-save-file-button2, #appMenu-translate-button, #appMenu-find-button2, #appMenu-settings-button, #appMenu-more-button2, #appMenu-help-button2, #appMenu-quit-button2)[disabled] > .toolbarbutton-icon { opacity: .45 !important; }

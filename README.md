@@ -1,54 +1,49 @@
 # Argon
 
-A calm, clean Firefox theme. It starts from the [Helium](https://github.com/imputnet/helium) browser's look, measured almost pixel for pixel, and adds my own touches from [Latin Accent Plus](https://github.com/rs4t/latin-accent-plus) and [Zen-Nebula](https://github.com/JustAdumbPrsn/Zen-Nebula). Just CSS and a settings file: no extensions needed.
+### Formerly HeliumFox
 
-Named after argon, the noble gas: its name is Greek for *idle*, and it glows blue-violet. *Formerly HeliumFox.*
+A calm, clean Firefox theme. It starts from the [Helium](https://github.com/imputnet/helium) browser's look, measured almost pixel for pixel, and adds my own touches from [Latin Accent Plus](https://github.com/rs4t/latin-accent-plus) and [Zen-Nebula](https://github.com/JustAdumbPrsn/Zen-Nebula). Just CSS and a settings file.
 
-![Helium (top) and Argon (bottom)](screenshots/helium-vs-argon.png)
+Named after argon, the noble gas: its name is Greek for *idle*, and it glows blue-violet.
 
-*Top: Helium. Bottom: Firefox with Argon.*
+**[Features](#features)** · **[Install](#install)** · **[Firefox Compact](#recommended-firefox-compact)** · **[Customize](#customize)** · **[Notes](#notes)** · **[Credits](#credits)**
 
-Helium is the main inspiration. Its layout, sizes and colors were measured from a running Helium window and checked against Helium's source code, so Firefox lines up with it almost pixel for pixel. Argon is an unofficial fan theme and isn't affiliated with Helium or imput.
+<p align="center">
+  <img src="screenshots/argon-menu.webp" width="49%" alt="Argon with the menu open: Chromium-style icons on every row">
+  <img src="screenshots/argon-compact-layout.webp" width="49%" alt="Argon in the Compact layout: address bar and tabs in one row">
+</p>
+<p align="center"><sub>Left: the menu, with Helium's icons. Right: the Compact layout from <a href="https://github.com/rs4t/firefox-compact">Firefox Compact</a>.</sub></p>
 
-## What it copies from Helium
+> [!TIP]
+> **Use it with [Firefox Compact](#recommended-firefox-compact).** It adds Helium's layout picker and frameless mode, and Argon is designed around it. It's strongly recommended for the best experience.
 
-- **Dynamic layout:** one row with back, forward, reload, a wide address bar, `+`, extensions and the menu. Tabs appear in a second row only when 2 or more tabs are open. Helium's Classic, Compact and Vertical layouts are available too (see *Optional: layouts and frameless mode*).
-- **Exact sizes:** 28px address bar and buttons, 3px spacing, 197px tabs with 8px corners and thin dividers, and the page inset by 3px with a 1px border and rounded corners.
-- **Helium's colors** in dark and light mode. They follow your Windows setting.
-- **Address bar:** the URL is centered, there's one "site info" icon on the left and only the star on the right.
-- **Loading bar:** a thin line with a soft glow along the bottom of the address bar while a page loads, like Helium's progress bar.
-- **Popups:** right-click menus, the menu, downloads, extensions, the site-info panel, permission prompts, the notification bar, the find bar and tooltips all use Helium's style.
-- **Helium's icons:** the back, forward, reload, `+`, extensions, menu, download, bookmark-star and site-info icons are Chromium's own, the ones Helium uses. Toolbar buttons get Helium's round hover.
-- **Small details:** the three-dot menu, a globe icon for sites without one, a star icon on the new tab, and thin overlay scrollbars that only show while scrolling.
+## Features
 
-## Argon's own touches
+| | Feature | What it does |
+| --- | --- | --- |
+| Helium | **Layout** | One row with the nav buttons, a wide address bar, `+`, extensions and the menu. Tabs show in a second row only with 2+ tabs |
+| Helium | **Sizes** | 28px bar and buttons, 3px spacing, 197px tabs with 8px corners, page inset with rounded corners |
+| Helium | **Colors** | Helium's dark and light palette, following your Windows setting |
+| Helium | **Icons** | Chromium's own icons on the toolbar and in the menu, with Helium's round hover |
+| Helium | **Address bar** | Centered URL, a lock on the left, the star on the right, a compact results list |
+| Helium | **Loading bar** | A thin glowing line along the bottom of the address bar while a page loads |
+| Helium | **Popups** | Menus, panels, prompts, the notification bar, the find bar and tooltips in Helium's style |
+| Helium | **Scrollbars** | Thin overlay scrollbars that only show while scrolling |
+| Argon | **Accent color** | Your Windows accent (it can follow your wallpaper), brightened so it stays readable |
+| Argon | **Bookmarks bar** | Hidden until you hover the toolbar (*Only Show on New Tab* mode) |
+| Argon | **Fullscreen pill** | A small rounded warning instead of Firefox's big banner |
+| Argon | **Animations** | Short, no bounce: tab switches, address-bar results, the tab ✕. Off with Windows' *Animation effects* |
+| Argon | **No purple** | Firefox 159's built-in violet accent replaced with yours |
 
-- **Your Windows accent color**, which can follow your wallpaper, for the focus ring, the loading bar and accent-colored icons and text on hover. Hover backgrounds stay Helium's neutral gray.
-- **Bookmarks bar on hover:** with *Only Show on New Tab*, it stays hidden and slides in when you hover the toolbar.
-- **Fullscreen warning** as a small pill instead of Firefox's big banner.
-- **Calm animations:** the page eases in when you switch tabs, the address-bar results fade in, and the tab ✕ fades in on hover. They're short with no bounce, and turn off when Windows' *Animation effects* is off.
-- **No leftover purple:** Firefox 159's built-in violet accent ("Nova") is replaced with your accent color.
+## Install
 
----
-
-## Installation
-
-### Quick way (Windows)
-
-Paste this into PowerShell and press Enter:
+**Windows:** paste this into PowerShell and press Enter.
 
 ```powershell
 irm https://raw.githubusercontent.com/rs4t/argon-firefox/main/install.ps1 | iex
 ```
 
-The installer:
-- **Finds your profile:** it finds your Firefox profile and saves the theme as `argon.css` and `argon-content.css`.
-- **Imports the theme:** it imports them from `userChrome.css` and `userContent.css`. Other `@import` lines (like [Firefox Compact](https://github.com/rs4t/firefox-compact)) are kept.
-- **Replaces Latin Accent Plus:** it switches off Latin Accent Plus and its see-through settings if you had it, and backs up any older theme.
-- **Turns on settings:** it enables the settings Argon needs.
-- **Arranges the toolbar:** if Firefox is closed, it arranges the toolbar like Helium. Your old settings are saved as `prefs.js.argon-backup`.
-
-Read what it does in [install.ps1](install.ps1).
+It finds your Firefox profile, installs the theme as `argon.css` and `argon-content.css`, and keeps other imports like Firefox Compact's. It also replaces Latin Accent Plus or HeliumFox if you had them, backing up the old files. If Firefox is closed, it arranges the toolbar like Helium. Read what it does in [install.ps1](install.ps1).
 
 <details>
 <summary><b>Manual install</b> (or Mac/Linux)</summary>
@@ -68,11 +63,11 @@ If you already have a `userChrome.css` or `userContent.css`, add `@import "argon
 
 </details>
 
-**Optional: bookmarks bar.** Right-click the toolbar, then **Bookmarks Toolbar**, then **Only Show on New Tab** to get the hover reveal.
+**Optional:** for the bookmarks bar hover, right-click the toolbar, then **Bookmarks Toolbar**, then **Only Show on New Tab**.
 
-### Optional: layouts and frameless mode
+## Recommended: Firefox Compact
 
-Install [**Firefox Compact**](https://github.com/rs4t/firefox-compact) to get Helium's layout settings in a popup:
+[**Firefox Compact**](https://github.com/rs4t/firefox-compact) ([add to Firefox](https://addons.mozilla.org/firefox/addon/compact-mode/)) is a small add-on that gives Argon Helium's layout settings in a popup:
 
 | Layout | What it does |
 | --- | --- |
@@ -81,9 +76,7 @@ Install [**Firefox Compact**](https://github.com/rs4t/firefox-compact) to get He
 | **Compact** | Everything in one row: address bar, tabs, `+`, extensions, menu |
 | **Vertical** | Firefox's own vertical tabs (Settings → General → Browser layout), styled like Helium |
 
-It also adds Helium's **Frameless mode**, which hides the toolbars until you hover the top of the window and makes the page go edge to edge. Its **Always show the top bar** option hides only the tabs. The installer keeps Firefox Compact's `@import "compact.css";` line first in `userChrome.css`.
-
----
+It also adds Helium's **Frameless mode**: the toolbars hide until you hover the top of the window, and the page goes edge to edge. **Always show the top bar** hides only the tabs. Argon is designed with it in mind, so it's strongly recommended.
 
 ## Customize
 
@@ -97,22 +90,21 @@ At the top of `argon.css`:
 | `--h-tab-slot` | Tab width (Helium: `201px`) |
 | `--h-url-font` / `--h-tab-font` | Text size in the address bar and on tabs |
 
-For a fixed accent color instead of your Windows one, search for `--h-accent: AccentColor;` and replace `AccentColor` with a color like `#7296ff`.
-
-Every section is labeled, so you can delete any feature you don't want. The animations are in their own block near the end of the file.
+For a fixed accent color instead of your Windows one, search for `--h-accent-raw: AccentColor;` and replace `AccentColor` with a color like `#7296ff`. Every section is labeled, so you can delete any feature you don't want.
 
 ## Notes
 
 - Dark mode is measured from Helium pixel by pixel. Light mode uses Helium's light colors from its source, but has been tested less.
 - Made for **Firefox 159** on **Windows 11**. Firefox updates sometimes rename things. If something breaks, please [open an issue](../../issues).
 - The window-button spacing assumes Windows. On Mac or Linux, adjust `--h-caption-width`.
+- Argon is an unofficial fan theme and isn't affiliated with Helium or imput.
 
 ## Credits
 
-- [**Helium**](https://github.com/imputnet/helium) by imput: the browser this theme copies. Its layout, sizes, colors, progress bar, info bar and find bar values come from its source.
-- [**Latin Accent Plus**](https://github.com/rs4t/latin-accent-plus) (my other theme), the source of the accent color, bookmarks reveal, fullscreen pill and animations. It's based on [**Latin Accent**](https://github.com/Acercandr0/Latin-Accent) by Acercandr0.
+- [**Helium**](https://github.com/imputnet/helium) by imput: the main inspiration. Its layout, sizes, colors, progress bar, info bar and find bar values come from its source.
+- [**Latin Accent Plus**](https://github.com/rs4t/latin-accent-plus) (my other theme): the accent color, bookmarks reveal, fullscreen pill and animations. It's based on [**Latin Accent**](https://github.com/Acercandr0/Latin-Accent) by Acercandr0.
 - [**Zen-Nebula**](https://github.com/JustAdumbPrsn/Zen-Nebula) by JustADumbPrsn: the original tab-switch animation (toned down here).
-- [**Chromium**](https://chromium.googlesource.com/chromium/src) (BSD licence): the toolbar icons, from its "Chrome Refresh" icon set.
+- [**Chromium**](https://chromium.googlesource.com/chromium/src) (BSD license): the toolbar and menu icons, from its "Chrome Refresh" icon set.
 
 ## License
 

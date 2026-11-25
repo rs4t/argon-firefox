@@ -31,6 +31,7 @@ Named after argon, the noble gas: its name is Greek for *idle*, and it glows blu
 | Helium | **Scrollbars** | Thin overlay scrollbars that only show while scrolling |
 | Argon | **Accent color** | Your Windows accent (it can follow your wallpaper), brightened so it stays readable |
 | Argon | **Bookmarks bar** | Hidden until you hover the toolbar (*Only Show on New Tab* mode) |
+| Argon | **Extensions panel** | A compact grid of icons, 4 per row. Right-click an icon for its menu |
 | Argon | **Fullscreen pill** | A small rounded warning instead of Firefox's big banner |
 | Argon | **Animations** | Short, no bounce: tab switches, address-bar results, the tab ✕. Off with Windows' *Animation effects* |
 | Argon | **No purple** | Firefox 159's built-in violet accent replaced with yours |

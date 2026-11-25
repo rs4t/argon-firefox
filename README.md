@@ -16,6 +16,7 @@ Helium is the main inspiration. Its layout, sizes and colors were measured from 
 - **Address bar:** the URL is centered, there's one "site info" icon on the left and only the star on the right.
 - **Loading bar:** a thin line with a soft glow along the bottom of the address bar while a page loads, like Helium's progress bar.
 - **Popups:** right-click menus, the menu, downloads, extensions, the site-info panel, permission prompts, the notification bar, the find bar and tooltips all use Helium's style.
+- **Helium's icons:** the back, forward, reload, `+`, extensions, menu, download, bookmark-star and site-info icons are Chromium's own, the ones Helium uses. Toolbar buttons get Helium's round hover.
 - **Small details:** the three-dot menu, a globe icon for sites without one, a star icon on the new tab, and thin overlay scrollbars that only show while scrolling.
 
 ## My twists (from Latin Accent Plus)
@@ -32,28 +33,20 @@ Helium is the main inspiration. Its layout, sizes and colors were measured from 
 
 ### Quick way (Windows)
 
-Paste one of these into PowerShell and press Enter.
-
-**Theme only:**
+Paste this into PowerShell and press Enter:
 
 ```powershell
 irm https://raw.githubusercontent.com/rs4t/heliumfox/main/install.ps1 | iex
 ```
 
-**Theme + Helium's start page** ([Simple-start](https://github.com/SpringDallies/Simple-start) for new tabs and as your homepage):
-
-```powershell
-irm https://raw.githubusercontent.com/rs4t/heliumfox/main/install-with-startpage.ps1 | iex
-```
-
-The theme installer:
+The installer:
 - **Finds your profile:** it finds your Firefox profile and saves the theme as `heliumfox.css` and `heliumfox-content.css`.
 - **Imports the theme:** it imports them from `userChrome.css` and `userContent.css`. Other `@import` lines (like [Firefox Compact](https://github.com/rs4t/firefox-compact)) are kept.
 - **Replaces Latin Accent Plus:** it switches off Latin Accent Plus and its see-through settings if you had it, and backs up any older theme.
 - **Turns on settings:** it enables the settings HeliumFox needs.
 - **Arranges the toolbar:** if Firefox is closed, it arranges the toolbar like Helium. Your old settings are saved as `prefs.js.heliumfox-backup`.
 
-The start-page version also downloads Simple-start to `%APPDATA%\Mozilla\Firefox\simple-start`. It adds 2 small config files to the Firefox install folder, so Windows asks for admin rights once. Read what they do in [install.ps1](install.ps1) and [install-with-startpage.ps1](install-with-startpage.ps1).
+Read what it does in [install.ps1](install.ps1).
 
 <details>
 <summary><b>Manual install</b> (or Mac/Linux)</summary>
@@ -74,17 +67,6 @@ If you already have a `userChrome.css` or `userContent.css`, add `@import "heliu
 </details>
 
 **Optional: bookmarks bar.** Right-click the toolbar, then **Bookmarks Toolbar**, then **Only Show on New Tab** to get the hover reveal.
-
-### Optional: Helium's start page
-
-HeliumFox comes with a simple Helium-style new tab page (a gradient with a star). To use the same start page as Helium, use [**Simple-start**](https://github.com/SpringDallies/Simple-start) by SpringDallies. The second install command above sets it up for you. To do it by hand:
-
-1. Download Simple-start and extract it somewhere permanent.
-2. In [`newtab/mozilla.cfg`](newtab/mozilla.cfg), replace the example path with the path to its `index.html`.
-3. Copy `mozilla.cfg` into your Firefox install folder (e.g. `C:\Program Files\Mozilla Firefox\`), and `autoconfig.js` into its `defaults\pref\` folder. This needs admin rights.
-4. Turn off any new-tab extension (like Bonjourr), because those take priority. Then restart Firefox.
-
-To also open it when Firefox starts, go to `about:preferences#home`, open **Homepage and new windows**, choose **Custom URLs…** and paste the same `file:///…/index.html` path.
 
 ### Optional: layouts and frameless mode
 
@@ -128,7 +110,7 @@ Every section is labeled, so you can delete any feature you don't want. The anim
 - [**Helium**](https://github.com/imputnet/helium) by imput: the browser this theme copies. Its layout, sizes, colors, progress bar, info bar and find bar values come from its source.
 - [**Latin Accent Plus**](https://github.com/rs4t/latin-accent-plus) (my other theme), the source of the accent color, bookmarks reveal, fullscreen pill and animations. It's based on [**Latin Accent**](https://github.com/Acercandr0/Latin-Accent) by Acercandr0.
 - [**Zen-Nebula**](https://github.com/JustAdumbPrsn/Zen-Nebula) by JustADumbPrsn: the original tab-switch animation (toned down here).
-- [**Simple-start**](https://github.com/SpringDallies/Simple-start) by SpringDallies: the optional start page.
+- [**Chromium**](https://chromium.googlesource.com/chromium/src) (BSD licence): the toolbar icons, from its "Chrome Refresh" icon set.
 
 ## License
 

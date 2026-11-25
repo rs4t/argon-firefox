@@ -487,7 +487,7 @@ toolbar .toolbarbutton-1:not([disabled]):hover,
 /* hover background stays on the button itself, not the masked icon */
 #new-tab-button:hover, #PanelUI-menu-button:hover { background: transparent !important; }
 #new-tab-button:hover > .toolbarbutton-icon { box-shadow: none !important; }
-#nav-bar :is(#new-tab-button, #PanelUI-menu-button):hover { background-color: var(--h-hover) !important; border-radius: 6px !important; }
+#nav-bar :is(#new-tab-button, #PanelUI-menu-button):hover { background-color: var(--h-hover) !important; border-radius: 50% !important; }
 
 #trust-icon-container:not(.insecure, .breached) #trust-icon {
   list-style-image: none !important;
@@ -596,7 +596,9 @@ toolbar .toolbarbutton-1:not([disabled]):hover,
    Address-bar dropdown, Helium-style: one dark panel, compact rows,
    neutral highlight, URLs in your accent colour
    ========================================================================== */
-#urlbar {
+/* Firefox 159 sets these on the results view and on each row, so they're
+   set on those elements too (a value on #urlbar alone would lose). */
+#urlbar, #urlbar .urlbarView, #urlbar .urlbarView-row {
   --urlbarview-background-color-hover: var(--h-hover) !important;
   --urlbarview-background-color-selected: var(--h-hover) !important;
   --urlbarview-text-color-hover: var(--h-fg) !important;
@@ -609,6 +611,9 @@ toolbar .toolbarbutton-1:not([disabled]):hover,
   --urlbarview-row-inner-min-height: 32px !important;
   --urlbarview-row-padding-block: 0px !important;
   --urlbarview-row-extra-padding-block: 0px !important;
+  --urlbarview-row-gutter: 2px !important;
+  --urlbarview-labeled-row-margin-top: 26px !important;
+  --urlbarview-labeled-row-label-top: -22px !important;
   --urlbarview-icon-size: 16px !important;
   --urlbarview-favicon-size: 16px !important;
   --urlbarview-rich-suggestion-default-icon-size: 16px !important;
@@ -620,30 +625,61 @@ toolbar .toolbarbutton-1:not([disabled]):hover,
   --urlbarview-action-button-background-color: transparent !important;
   --urlbarview-action-button-background-color-hover: var(--h-hover) !important;
   --link-color: var(--h-accent) !important;
+  /* The results' background layer (.urlbarView-background) uses this colour */
+  --urlbar-background-color-focus: var(--h-popup) !important;
+  /* Firefox 159 grows the open bar outward, which pushes it past the top of
+     the window; Helium's stays put */
+  --urlbar-input-growth-open-block: 0px !important;
+  --urlbar-input-growth-open-inline: 0px !important;
 }
-/* The open bar + results are one panel in the popup colour */
+/* The bar's own background layer paints the colour; the input row stays clear */
+#urlbar .urlbar-input-container { background-color: transparent !important; }
+#urlbar .urlbarView-background {
+  background-color: var(--h-popup) !important;
+  border-color: var(--h-content-border) !important;
+}
+
+/* The open bar: input on top, results below, all in the popup colour */
 #urlbar[open] .urlbar-background {
-  background: var(--h-popup) !important;
+  background-color: var(--h-popup) !important;
+  background-image: none !important;
   outline: 1px solid var(--h-content-border) !important;
   outline-offset: -1px !important;
   box-shadow: 0 10px 28px rgba(0, 0, 0, .35) !important;
 }
+#urlbar .urlbar-background::before { background: none !important; }
 #urlbar[open] .urlbar-input-container { background: transparent !important; }
-.urlbarView { background: transparent !important; color: var(--h-fg) !important; }
+/* The results list is its own layer in Firefox 159, so it gets the colour itself */
+#urlbar .urlbarView {
+  background-color: var(--h-popup) !important;
+  background-image: none !important;
+  color: var(--h-fg) !important;
+  border-radius: 0 0 var(--h-radius) var(--h-radius) !important;
+}
+#urlbar :is(.urlbarView-body-outer, .urlbarView-body-inner, .urlbarView-results) {
+  background: transparent !important;
+}
 .urlbarView-body-inner { border-top: 1px solid var(--h-content-border) !important; }
 .urlbarView-results { padding-block: 4px !important; }
 
-/* Rows */
-.urlbarView-row { padding-inline: 4px !important; }
-.urlbarView-row-inner {
+/* Rows: one highlight on the whole row, nothing on its inner box */
+#urlbar .urlbarView-row {
   min-height: 32px !important;
   padding-block: 0 !important;
   border-radius: 6px !important;
+  background: transparent !important;
   color: var(--h-fg) !important;
 }
-.urlbarView-row:is([selected], :hover) > .urlbarView-row-inner {
+#urlbar .urlbarView-row-inner {
+  min-height: 32px !important;
+  padding-block: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: inherit !important;
+}
+#urlbar .urlbarView-row:is([selected], :hover) {
   background: var(--h-hover) !important;
-  color: var(--h-fg) !important;
 }
 .urlbarView-title { font-size: 13px !important; }
 .urlbarView-title strong, .urlbarView-title > strong { font-weight: 600 !important; }
@@ -1015,4 +1051,126 @@ tooltip {
   min-height: 0 !important;
   max-height: 0 !important;
   padding: 0 !important;
+}
+
+/* ==========================================================================
+   Firefox 159 ("Nova") menu and panel colours. Nova renamed the panel
+   colour to --panel-background-color (default rgb(66, 65, 77), a grey-violet)
+   and draws a violet-pink gradient under the account row of the menu.
+   Set on every popup element so Nova's own values can't win.
+   ========================================================================== */
+:root, menupopup, panel, panelview, panelmultiview, .panel-subview-body {
+  --panel-background-color: var(--h-popup) !important;
+  --panel-border-color: var(--h-content-border) !important;
+  --panel-separator-color: var(--h-content-border) !important;
+  --panel-separator-zap-gradient: linear-gradient(var(--h-content-border), var(--h-content-border)) !important;
+  --popup-background-color: var(--h-popup) !important;
+  --popup-border-color: var(--h-content-border) !important;
+}
+
+
+/* ==========================================================================
+   Helium's toolbar icons and round hover.
+   The icons are Chromium's "Chrome Refresh" vector icons, the ones Helium
+   ships (chromium.googlesource.com, BSD licence), drawn as masks so they
+   take the theme's icon colour and turn accent-coloured on hover.
+   ========================================================================== */
+:root {
+  --h-ico-back: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m6.88 10.75 l4.19 4.19 L10 16 l-6 -6 l6 -6 l1.06 1.06 L6.88 9.25 H16 v1.5 Z'/%3E%3C/svg%3E");
+  --h-ico-forward: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M13.13 10.75 H4 v-1.5 h9.13 L8.94 5.06 L10 4 l6 6 l-6 6 l-1.06 -1.06 Z'/%3E%3C/svg%3E");
+  --h-ico-reload: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 16 c-1.67 0 -3.08 -0.58 -4.25 -1.75 C4.58 13.08 4 11.67 4 10 c0 -1.67 0.58 -3.08 1.75 -4.25 C6.92 4.58 8.33 4 10 4 c0.9 0 1.74 0.19 2.51 0.56 c0.77 0.38 1.43 0.88 1.99 1.5 V4 H16 v5 h-5 V7.5 h2.73 a4.44 4.44 0 0 0 -1.58 -1.46 A4.33 4.33 0 0 0 10 5.5 c-1.25 0 -2.31 0.44 -3.19 1.31 S5.5 8.75 5.5 10 c0 1.25 0.44 2.31 1.31 3.19 C7.69 14.06 8.75 14.5 10 14.5 c1.17 0 2.17 -0.39 3 -1.16 a4.43 4.43 0 0 0 1.44 -2.84 h1.54 c-0.12 1.56 -0.76 2.86 -1.9 3.92 C12.95 15.47 11.58 16 10 16 Z'/%3E%3C/svg%3E");
+  --h-ico-stop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.06 15 L5 13.94 L8.94 10 L5 6.06 L6.06 5 L10 8.94 L13.94 5 L15 6.06 L11.06 10 L15 13.94 L13.94 15 L10 11.06 Z'/%3E%3C/svg%3E");
+  --h-ico-add: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M7.18 12.22 V8.82 H3.79 V7.18 h3.4 V3.79 h1.63 v3.4 h3.4 v1.63 H8.82 v3.4 Z m0 0 Z'/%3E%3C/svg%3E");
+  --h-ico-dots: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 16 c-0.41 0 -0.77 -0.15 -1.06 -0.44 a1.45 1.45 0 0 1 -0.44 -1.06 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.45 1.45 0 0 1 10 13 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.3 0.44 0.65 0.44 1.06 c0 0.41 -0.15 0.77 -0.44 1.06 A1.45 1.45 0 0 1 10 16 Z m0 -4.5 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.45 1.45 0 0 1 8.5 10 c0 -0.41 0.15 -0.77 0.44 -1.06 a1.45 1.45 0 0 1 1.06 -0.44 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.3 0.44 0.65 0.44 1.06 c0 0.41 -0.15 0.77 -0.44 1.06 a1.45 1.45 0 0 1 -1.06 0.44 Z m0 -4.5 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.45 1.45 0 0 1 8.5 5.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.45 1.45 0 0 1 10 4 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.3 0.44 0.65 0.44 1.06 c0 0.41 -0.15 0.77 -0.44 1.06 A1.45 1.45 0 0 1 10 7 Z'/%3E%3C/svg%3E");
+  --h-ico-ext: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4.5 17 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.44 1.44 0 0 1 3 15.5 V12 a2.12 2.12 0 0 0 1.42 -0.61 A1.88 1.88 0 0 0 5 10 a1.88 1.88 0 0 0 -0.58 -1.39 A2.12 2.12 0 0 0 3 8 V4.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.44 1.44 0 0 1 4.5 3 H8 c0 -0.56 0.19 -1.03 0.58 -1.42 A1.93 1.93 0 0 1 10 1 c0.56 0 1.03 0.19 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 h3.5 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.29 0.44 0.65 0.44 1.06 V8 a1.94 1.94 0 0 1 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 c0 0.56 -0.19 1.03 -0.58 1.42 A1.94 1.94 0 0 1 17 12 v3.5 c0 0.41 -0.15 0.77 -0.44 1.06 A1.44 1.44 0 0 1 15.5 17 Z m0 -1.5 h11 v-11 h-11 v2.33 a3.23 3.23 0 0 1 1.47 1.28 C6.32 8.69 6.5 9.32 6.5 10 c0 0.7 -0.18 1.33 -0.53 1.91 A3.12 3.12 0 0 1 4.5 13.17 Z M10 10 Z'/%3E%3C/svg%3E");
+  --h-ico-download: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 18 a1.99 1.99 0 0 1 -1.42 -0.57 A1.99 1.99 0 0 1 2 16 v-3 h2 v3 h12 v-3 h2 v3 c0 0.55 -0.2 1.02 -0.6 1.43 c-0.38 0.38 -0.85 0.57 -1.4 0.57 Z m6 -4 L5 9 l1.4 -1.45 l2.6 2.6 V2 h2 v8.15 l2.6 -2.6 L15 9 Z'/%3E%3C/svg%3E");
+  --h-ico-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7.33 13.9 L10 12.31 l2.69 1.58 l-0.71 -3 l2.31 -1.98 l-3.06 -0.27 L10 5.79 L8.77 8.65 l-3.06 0.27 l2.34 1.98 Z M5.06 17 l1.31 -5.54 L2 7.73 l5.75 -0.5 L10 2 l2.25 5.25 l5.75 0.48 l-4.37 3.73 L14.94 17 L10 14.06 Z M10 10.06 Z m0 0 Z'/%3E%3C/svg%3E");
+  --h-ico-star-on: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5.06 17 l1.31 -5.54 L2 7.73 l5.75 -0.5 L10 2 l2.25 5.25 l5.75 0.48 l-4.37 3.73 L14.94 17 L10 14.06 Z m0 0 Z'/%3E%3C/svg%3E");
+  --h-ico-tune: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M9.72 16.79 a0.73 0.73 0 0 1 -0.22 -0.53 v-3.5 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.71 0.71 0 0 1 0.53 -0.21 c0.21 0 0.39 0.07 0.54 0.22 a0.73 0.73 0 0 1 0.22 0.54 v1 h5.25 c0.21 0 0.39 0.07 0.54 0.22 c0.14 0.14 0.22 0.32 0.22 0.53 c0 0.21 -0.07 0.39 -0.21 0.54 a0.73 0.73 0 0 1 -0.53 0.22 H11 v1 c0 0.21 -0.07 0.39 -0.21 0.54 a0.71 0.71 0 0 1 -0.53 0.22 c-0.21 0 -0.39 -0.07 -0.53 -0.21 Z M3.75 15.25 c-0.21 0 -0.39 -0.07 -0.53 -0.21 A0.71 0.71 0 0 1 3 14.5 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.73 0.73 0 0 1 0.54 -0.22 h3.5 c0.21 0 0.39 0.07 0.54 0.22 c0.14 0.14 0.22 0.32 0.22 0.53 c0 0.21 -0.07 0.39 -0.21 0.54 a0.73 0.73 0 0 1 -0.53 0.22 Z m2.47 -2.96 A0.73 0.73 0 0 1 6 11.75 v-1 H3.75 c-0.21 0 -0.39 -0.07 -0.53 -0.21 A0.72 0.72 0 0 1 3 10 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.73 0.73 0 0 1 0.54 -0.22 H6 v-1 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.71 0.71 0 0 1 0.53 -0.21 c0.21 0 0.39 0.07 0.54 0.22 a0.73 0.73 0 0 1 0.22 0.54 v3.5 c0 0.21 -0.07 0.39 -0.21 0.54 a0.71 0.71 0 0 1 -0.53 0.22 c-0.21 0 -0.39 -0.07 -0.53 -0.21 Z M9.75 10.75 c-0.21 0 -0.39 -0.07 -0.53 -0.21 A0.71 0.71 0 0 1 9 10 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.73 0.73 0 0 1 0.54 -0.22 h6.5 c0.21 0 0.39 0.07 0.54 0.22 c0.14 0.14 0.22 0.32 0.22 0.53 c0 0.21 -0.07 0.39 -0.21 0.54 a0.73 0.73 0 0 1 -0.53 0.22 Z m2.47 -2.96 A0.73 0.73 0 0 1 12 7.25 v-3.5 c0 -0.21 0.07 -0.39 0.22 -0.53 A0.71 0.71 0 0 1 12.75 3 c0.21 0 0.39 0.07 0.54 0.22 a0.73 0.73 0 0 1 0.22 0.54 v1 h2.75 c0.21 0 0.39 0.07 0.54 0.22 c0.14 0.14 0.22 0.32 0.22 0.53 c0 0.21 -0.07 0.39 -0.21 0.54 a0.73 0.73 0 0 1 -0.53 0.22 H13.5 v1 c0 0.21 -0.07 0.39 -0.21 0.54 a0.71 0.71 0 0 1 -0.53 0.22 c-0.21 0 -0.39 -0.07 -0.53 -0.21 Z M3.75 6.25 c-0.21 0 -0.39 -0.07 -0.53 -0.21 A0.71 0.71 0 0 1 3 5.5 c0 -0.21 0.07 -0.39 0.22 -0.53 a0.73 0.73 0 0 1 0.54 -0.22 h6.5 c0.21 0 0.39 0.07 0.54 0.22 c0.14 0.14 0.22 0.32 0.22 0.53 c0 0.21 -0.07 0.39 -0.21 0.54 a0.73 0.73 0 0 1 -0.53 0.22 Z'/%3E%3C/svg%3E");
+  /* the +, menu and site-info icons defined earlier use the Chromium shapes too */
+  --h-svg-plus: var(--h-ico-add);
+  --h-svg-dots: var(--h-ico-dots);
+  --h-svg-tune: var(--h-ico-tune);
+}
+
+/* Round hover like Helium: a 28px circle on the button itself */
+#nav-bar .toolbarbutton-1 > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack) {
+  background-color: transparent;
+  border-radius: 50% !important;
+}
+#nav-bar .toolbarbutton-1:not([disabled]):is(:hover, [open], [checked]) > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack) {
+  background-color: transparent !important;
+}
+#nav-bar .toolbarbutton-1,
+#PanelUI-menu-button { border-radius: 50% !important; }
+#nav-bar .toolbarbutton-1:not([disabled]):is(:hover, [open]),
+#nav-bar #PanelUI-menu-button:is(:hover, [open]) {
+  background-color: var(--h-hover) !important;
+}
+#nav-bar .toolbarbutton-1:not([disabled]):active { background-color: color-mix(in srgb, var(--h-hover) 100%, var(--h-fg) 6%) !important; }
+/* Same circle for the star and site-info buttons inside the address bar */
+#star-button-box, #trust-icon-container, .urlbar-page-action { border-radius: 50% !important; }
+
+/* Icons */
+#back-button > .toolbarbutton-icon,
+#forward-button > .toolbarbutton-icon,
+#reload-button > .toolbarbutton-icon,
+#stop-button > .toolbarbutton-icon,
+#new-tab-button > .toolbarbutton-icon,
+#unified-extensions-button > .toolbarbutton-icon,
+#unified-extensions-button > .toolbarbutton-badge-stack > .toolbarbutton-icon {
+  list-style-image: none !important;
+  background-color: var(--h-icon) !important;
+  mask-position: center !important;
+  mask-size: 20px 20px !important;
+  mask-repeat: no-repeat !important;
+}
+#back-button > .toolbarbutton-icon      { mask-image: var(--h-ico-back) !important; }
+#forward-button > .toolbarbutton-icon   { mask-image: var(--h-ico-forward) !important; }
+#reload-button > .toolbarbutton-icon    { mask-image: var(--h-ico-reload) !important; }
+#stop-button > .toolbarbutton-icon      { mask-image: var(--h-ico-stop) !important; }
+#new-tab-button > .toolbarbutton-icon   { mask-image: var(--h-ico-add) !important; mask-size: 16px 16px !important; }
+#unified-extensions-button > .toolbarbutton-icon,
+#unified-extensions-button > .toolbarbutton-badge-stack > .toolbarbutton-icon { mask-image: var(--h-ico-ext) !important; }
+#PanelUI-menu-button > .toolbarbutton-badge-stack > .toolbarbutton-icon,
+#PanelUI-menu-button > .toolbarbutton-icon { mask-size: 20px 20px !important; }
+#downloads-button:not([animate], [attention]) #downloads-indicator-icon {
+  list-style-image: none !important;
+  background-color: var(--h-icon) !important;
+  mask: var(--h-ico-download) center / 20px 20px no-repeat !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+/* Accent on hover */
+#nav-bar :is(#back-button, #forward-button, #reload-button, #stop-button, #new-tab-button, #unified-extensions-button):not([disabled]):hover > .toolbarbutton-icon,
+#nav-bar #unified-extensions-button:hover > .toolbarbutton-badge-stack > .toolbarbutton-icon,
+#nav-bar #PanelUI-menu-button:hover .toolbarbutton-icon,
+#downloads-button:not([animate], [attention]):hover #downloads-indicator-icon {
+  background-color: var(--h-accent) !important;
+}
+
+/* Bookmark star in the address bar: outline, filled in your accent when bookmarked */
+#star-button {
+  list-style-image: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  background-color: var(--h-icon) !important;
+  mask: var(--h-ico-star) center / 20px 20px no-repeat !important;
+}
+#star-button[starred] {
+  background-color: var(--h-accent) !important;
+  mask-image: var(--h-ico-star-on) !important;
+}
+#star-button-box:hover #star-button { background-color: var(--h-accent) !important; }
+#trust-icon-container:not(.insecure, .breached) #trust-icon { mask-size: 18px 18px !important; width: 18px !important; height: 18px !important; }
+/* the +, ⋮ buttons had square-ish corners from an earlier rule */
+#nav-bar :is(#new-tab-button, #PanelUI-menu-button) { border-radius: 50% !important; }
+#nav-bar #PanelUI-menu-button .toolbarbutton-icon { background-color: var(--h-icon) !important; }
+#nav-bar #PanelUI-menu-button:hover .toolbarbutton-icon { background-color: var(--h-accent) !important; }/* Every toolbar button is a 28x28 circle (some stretched to the 34px row) */
+#nav-bar :is(.toolbarbutton-1, #PanelUI-menu-button) {
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  min-width: 28px !important;
+  align-self: center !important;
 }

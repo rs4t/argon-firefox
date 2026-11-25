@@ -9,10 +9,8 @@ Named after argon, the noble gas: its name is Greek for *idle*, and it glows blu
 **[Features](#features)** · **[Install](#install)** · **[Firefox Compact](#recommended-firefox-compact)** · **[Customize](#customize)** · **[Notes](#notes)** · **[Credits](#credits)**
 
 <p align="center">
-  <img src="screenshots/argon-menu.webp" width="49%" alt="Argon with the menu open: Chromium-style icons on every row">
-  <img src="screenshots/argon-compact-layout.webp" width="49%" alt="Argon in the Compact layout: address bar and tabs in one row">
+  <img src="screenshots/argon.webp" alt="Firefox with Argon: Helium's clean toolbar and the menu open, with Chromium-style icons on every row">
 </p>
-<p align="center"><sub>Left: the menu, with Helium's icons. Right: the Compact layout from <a href="https://github.com/rs4t/firefox-compact">Firefox Compact</a>.</sub></p>
 
 > [!TIP]
 > **Use it with [Firefox Compact](#recommended-firefox-compact).** It adds Helium's layout picker and frameless mode, and Argon is designed around it. It's strongly recommended for the best experience.

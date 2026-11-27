@@ -201,8 +201,9 @@
 
 /* Hide things Helium doesn't show */
 #alltabs-button, #firefox-view-button, #ipprotection-button, #sidebar-button,
-#nav-bar-overflow-button:not([overflowedItems]),
 #tabs-newtab-button { display: none !important; }
+/* Customize mode points its overflow box at this button, so keep it there */
+:root:not([customizing]) #nav-bar-overflow-button:not([overflowedItems]) { display: none !important; }
 
 /* ---------- Toolbar buttons ---------- */
 toolbar .toolbarbutton-1 { fill: var(--h-icon) !important; }

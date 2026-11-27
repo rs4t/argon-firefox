@@ -7,11 +7,11 @@ A calm, clean Firefox theme. It starts from the [Helium](https://github.com/impu
 Named after argon, the noble gas: its name is Greek for *idle*, and it glows blue-violet.
 
 TODO list:
-Customize the right click menu
-Customize the hamburger menu more
+- Customize the right click menu
+- Customize the hamburger menu more
 
 Known Bugs:
-The "customize toolbar" thingy is bugged
+- The "customize toolbar" thingy is bugged
 
 **[Features](#features)** · **[Install](#install)** · **[Firefox Compact](#recommended-firefox-compact)** · **[Customize](#customize)** · **[Notes](#notes)** · **[Credits](#credits)**
 

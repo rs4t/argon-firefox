@@ -109,7 +109,6 @@ For a fixed accent color instead of your Windows one, search for `--h-accent-raw
 
 - [**Helium**](https://github.com/imputnet/helium) by imput: the main inspiration. Its layout, sizes, colors, progress bar, info bar and find bar values come from its source.
 - [**Latin Accent Plus**](https://github.com/rs4t/latin-accent-plus) (my other theme): the accent color, bookmarks reveal, fullscreen pill and animations. It's based on [**Latin Accent**](https://github.com/Acercandr0/Latin-Accent) by Acercandr0.
-- [**Zen-Nebula**](https://github.com/JustAdumbPrsn/Zen-Nebula) by JustADumbPrsn: the original tab-switch animation (toned down here).
 - [**Chromium**](https://chromium.googlesource.com/chromium/src) (BSD license): the toolbar and menu icons, from its "Chrome Refresh" icon set.
 
 ## License

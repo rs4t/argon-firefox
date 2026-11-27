@@ -10,9 +10,6 @@ TODO list:
 - Customize the right click menu
 - Customize the hamburger menu more
 
-Known Bugs:
-- The "customize toolbar" thingy is bugged
-
 **[Features](#features)** · **[Install](#install)** · **[Firefox Compact](#recommended-firefox-compact)** · **[Customize](#customize)** · **[Notes](#notes)** · **[Credits](#credits)**
 
 <p align="center">
